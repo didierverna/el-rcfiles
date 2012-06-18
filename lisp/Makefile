@@ -6,7 +6,7 @@
 ## Author:        Didier Verna <didier@xemacs.org>
 ## Maintainer:    Didier Verna <didier@xemacs.org>
 ## Created:       Wed Mar  1 13:25:19 2000
-## Last Revision: Mon Jun 18 14:33:18 2012
+## Last Revision: Mon Jun 18 15:44:14 2012
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 2,
@@ -104,7 +104,7 @@ clean:
 	-rm *~
 
 distclean: clean
-	-rm *.elc auto-autoloads.el custom-load.el
+	-rm *.elc auto-autoloads.el custom-load.el cus-load.el
 ifeq ($(XEMACS_21_5),t)
 	-rm custom-defines.el
 endif
