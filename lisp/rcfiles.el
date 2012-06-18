@@ -88,7 +88,7 @@ before the .el extension."
 	 (rcfiles
 	  (mapcar #'(lambda (file) (file-name-sans-extension file))
 		  (directory-files rcfiles-directory nil ext-regexp nil t)))
-	 rcfile library)
+	 library)
     (dolist (rcfile rcfiles)
       (setq library (substring rcfile 0 -3))
       (eval-after-load library `(load ,rcfile)))))
