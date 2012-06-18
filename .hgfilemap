@@ -1,0 +1,37 @@
+# .hg filemap --- File information for 'hg convert'.
+
+# Copyright (C) 2012 Didier Verna.
+
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.
+
+
+exclude .hgauthormap
+exclude .hgfilemap
+
+exclude .gitignore
+exclude .gitattributes
+
+exclude local.mak
+exclude local.inc
+exclude local.prj
+exclude Makefile
+exclude Makefile.inc
+rename Makefile.pkg Makefile
+exclude INSTALL
+
+exclude lisp/local.mak
+exclude lisp/local.inc
+exclude lisp/Makefile
+
+exclude doc/local.mak
+exclude doc/local.inc
+exclude doc/Makefile
+
+exclude etc/local.mak
+exclude etc/local.inc
+exclude etc/Makefile
+
+
+# .hgconvert ends here

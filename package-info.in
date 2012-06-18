@@ -1,0 +1,19 @@
+(XXXX
+  (standards-version 1.0
+   version VERSION
+   author-version AUTHOR_VERSION
+   date DATE
+   build-date BUILD_DATE
+   maintainer MAINTAINER
+   distribution stable
+   priority medium
+   category CATEGORY
+   dump nil
+   description "XXXX."
+   filename FILENAME
+   md5sum MD5SUM
+   size SIZE
+   provides (XXXX)
+   requires (REQUIRES)
+   type regular
+))

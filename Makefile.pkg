@@ -1,0 +1,80 @@
+### Makefile --- for packages in the XEmacs package infrastructure
+
+## Copyright (C) 2012 Didier Verna.
+
+## Author:        Didier Verna <didier@xemacs.org>
+## Maintainer:    Didier Verna <didier@xemacs.org>
+## Created:       Wed Mar  1 13:23:24 2000
+## Last Revision: Mon Jan 16 10:49:38 2012
+
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License version 2,
+## as published by the Free Software Foundation.
+
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+### Commentary:
+
+## Contents management by FCM version 0.1.
+
+## Please use GNU Make with this makefile.
+
+
+### Code:
+
+include Makefile.prj
+include lisp/Makefile.prj
+-include doc/Makefile.prj
+-include etc/Makefile.prj
+
+PACKAGE          = $(PROJECT)
+PKG_TYPE         = regular
+REQUIRES         =
+CATEGORY         = standard
+PACKAGE_SUPPRESS =
+
+VERSION        =
+AUTHOR_VERSION =
+MAINTAINER     = Didier Verna <didier@xemacs.org>
+
+ELCS                 = $(EL_FILES:%.el=lisp/%.elc)
+ELCS_1               =
+ELCS_1_DEST          =
+EARLY_GENERATED_LISP =
+GENERATED_LISP       =
+PRELOADS             =
+AUTOLOAD_PATH        = lisp
+
+# #### WARNING: note the := here. This is needed because XEmacs.rules in turn
+# #### sets its own version of TEXI_FILES back to EXPLICIT_DOCS.
+EXPLICIT_DOCS         := $(TEXI_FILES:%=doc/%)
+STANDARD_DOCS          =
+EXTRA_TEXI_FILES       =
+EXTRA_HTML_FILES       =
+DOCS_TEXINFO_EXTENSION =
+DOCS_TXI_EXTENSION     =
+EXTRA_DOC_FILES        =
+
+EXTRA_DEPENDENCIES =
+EXTRA_SOURCES      =
+LIBSRC_FILES       =
+DATA_FILES         =
+DATA_DEST          =
+
+include ../../XEmacs.rules
+
+
+
+## Local Variables:
+## mode: makefile
+## End:
+
+### Makefile ends here
