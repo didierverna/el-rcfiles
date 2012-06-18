@@ -62,10 +62,9 @@
   "Emacs Lisp initialization files management."
   :group 'emacs)
 
-(defcustom rcfiles-directory "~/.xemacs/xemacs-packages/lisp/rc"
-  "*Directory where RCFiles looks for initialization files.
-
-Defaults to ~/.xemacs/xemacs-packages/lisp/rc/."
+(defcustom rcfiles-directory
+  (if (featurep 'xemacs) "~/.xemacs/rc" "~/.emacs.d/rc")
+  "*Directory where RCFiles looks for initialization files."
   :group 'rcfiles
   :type 'string)
 
