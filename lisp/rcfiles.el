@@ -96,4 +96,6 @@ before the .el extension."
 		       `(load ,rcfile)))))
 
 
+(provide 'rcfiles)
+
 ;;; rcfiles.el ends here
