@@ -6,7 +6,7 @@
 ## Author:        Didier Verna <didier@xemacs.org>
 ## Maintainer:    Didier Verna <didier@xemacs.org>
 ## Created:       Wed Mar  1 13:25:19 2000
-## Last Revision: Mon Jun 18 15:44:14 2012
+## Last Revision: Mon Jun 18 17:41:04 2012
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 2,
@@ -46,19 +46,30 @@ XEMACS      := $(shell if $(EMACS) --version \
 			    | grep "XEmacs" > /dev/null; then		\
 			 echo t;					\
 		       fi)
-
 XEMACS_21_5 := $(shell if $(EMACS) --version \
 			    | grep "XEmacs 21.5" > /dev/null; then	\
 			 echo t;					\
 		       fi)
 
-# #### NOTE: the lisp files are not detected automatically. They must be
-# listed explicitely in Makefile.prj, because the compilation order might be
-# important (e.g. for getting macros).
-ALL_EL_FILES := $(EL_FILES) auto-autoloads.el custom-load.el
-ifeq ($(XEMACS_21_5),t)
-ALL_EL_FILES += custom-defines.el
+ifeq ($(XEMACS),t)
+AUTOLOAD_FILE := auto-autoloads.el
+CUSLOAD_FILE  := custom-load.el
+else
+AUTOLOAD_FILE := $(PROJECT)-autoloads.el
+CUSLOAD_FILE  := cus-load.el
 endif
+
+GEN_EL_FILES := $(AUTOLOAD_FILE) $(CUSLOAD_FILE)
+ifeq ($(XEMACS_21_5),t)
+GEN_EL_FILES += custom-defines.el
+endif
+
+
+# #### NOTE: the lisp files are not detected automatically. They must be
+# listed explicitely in Makefile.prj (which can, in turn detect them
+# automatically), because the compilation order might be important (e.g. for
+# getting macros).
+ALL_EL_FILES := $(EL_FILES) $(GEN_EL_FILES)
 ELC_FILES    := $(ALL_EL_FILES:%.el=%.elc)
 EL_DIR       := $(PKG_DIR)/lisp/$(PROJECT)
 
@@ -79,9 +90,9 @@ else
 all: autoloads custom-load elc
 endif
 
-autoloads: auto-autoloads.el
+autoloads: $(AUTOLOAD_FILE)
 
-custom-load: custom-load.el
+custom-load: $(CUSLOAD_FILE)
 
 ifeq ($(XEMACS_21_5),t)
 custom-defines: custom-defines.el
@@ -104,50 +115,52 @@ clean:
 	-rm *~
 
 distclean: clean
-	-rm *.elc auto-autoloads.el custom-load.el cus-load.el
+	-rm -f *.elc $(AUTOLOAD_FILE) $(CUSLOAD_FILE)
 ifeq ($(XEMACS_21_5),t)
 	-rm custom-defines.el
 endif
 
-auto-autoloads.el: $(EL_FILES)
+$(AUTOLOAD_FILE): $(EL_FILES)
 ifeq ($(XEMACS_21_5),t)
 	$(EMACS) -batch -l autoload -f batch-update-directory-autoloads \
 	  $(PROJECT) .
-	@rm -f auto-autoloads.el~
 else ifeq ($(XEMACS),t)
 	$(EMACS) -batch -q -l autoload				\
 	  -eval '(setq autoload-package-name "$(PROJECT)")'	\
 	  -f batch-update-directory .
-	@rm -f auto-autoloads.el~
-	@touch auto-autoloads.el
 else
 	$(EMACS) --batch --load autoload	\
-	  --eval '(let ((generated-autoload-file "$(PROJECT)-autoloads.el"))\
-		    (update-directory-autoloads))'
-	@rm -f auto-autoloads.el~
+	  --eval '(let ((generated-autoload-file \
+			 "$(abspath $(AUTOLOAD_FILE))"))\
+		    (update-directory-autoloads "."))'
 endif
+	@rm -f $@~
+	@touch $@
 
-custom-load.el: $(EL_FILES)
+$(CUSLOAD_FILE): $(EL_FILES)
 ifeq ($(XEMACS),t)
 	$(EMACS) -batch -q -l cus-dep -f Custom-make-dependencies .
-	@rm -f custom-load.el~
-	@touch custom-load.el
 else
 	$(EMACS) --batch --load cus-dep -f custom-make-dependencies .
-	@rm -f custom-load.el~
-	@touch custom-load.el
 endif
+	@rm -f $@~
+	@touch $@
 
 ifeq ($(XEMACS_21_5),t)
 custom-defines.el: $(EL_FILES)
 	$(EMACS) -batch -l autoload -f batch-update-directory-custom-defines \
 	  $(PROJECT) .
-	@rm -f custom-defines.el~
+	@rm -f $@~
+	@touch $@
 endif
 
 
 %.elc: %.el
+ifeq ($(XEMACS),t)
 	$(EMACS) -batch -q $(ADD_MY_PATH) -f batch-byte-compile $<
+else
+	$(EMACS) --batch $(ADD_MY_PATH) -f batch-byte-compile $<
+endif
 
 .PHONY: all autoloads custom-load custom-defines			\
 	elc								\
