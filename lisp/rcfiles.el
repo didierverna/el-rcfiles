@@ -36,9 +36,8 @@
 ;;; Usage:
 
 ;; To provide an rc file for a library foo, write code in a file named
-;; "~/.xemacs/xemacs-packages/lisp/rc/foo-rc.el". Both the directory and the
-;; pseudo-extension are customizable. The directory should be in your
-;; load-path though.
+;; foo<RCFILES-PSEUDO-EXTENSION>.el and put it in RCFILES-DIRECTORY. Both the
+;; directory and the pseudo-extension are customizable.
 
 ;; To use RCFiles, put (rcfiles-register-rc-files) in your Emacs
 ;; initialization file. This function can also be called anytime you want to
@@ -66,8 +65,7 @@
 (defcustom rcfiles-directory "~/.xemacs/xemacs-packages/lisp/rc"
   "*Directory where RCFiles looks for initialization files.
 
-Defaults to ~/.xemacs/xemacs-packages/lisp/rc/.
-This directory should be in your load-path."
+Defaults to ~/.xemacs/xemacs-packages/lisp/rc/."
   :group 'rcfiles
   :type 'string)
 
@@ -86,12 +84,17 @@ before the .el extension."
   (let* ((ext-regexp (concat (regexp-quote rcfiles-pseudo-extension)
 			     "\\.el[c]?$"))
 	 (rcfiles
-	  (mapcar #'(lambda (file) (file-name-sans-extension file))
-		  (directory-files rcfiles-directory nil ext-regexp nil t)))
-	 library)
+	   (mapcar #'(lambda (file) (file-name-sans-extension file))
+		   ;; #### NOTE: this will break if someone puts a non elisp
+		   ;; file named *.el[c] in that directory, but this would be
+		   ;; a really bad idea. Also note that potential duplicates
+		   ;; (such as when there is both a .el and a .elc file) are
+		   ;; not a problem because EVAL-AFTER-LOAD takes care of
+		   ;; that.
+		   (directory-files rcfiles-directory ext-regexp))))
     (dolist (rcfile rcfiles)
-      (setq library (substring rcfile 0 -3))
-      (eval-after-load library `(load ,rcfile)))))
+      (eval-after-load (file-name-nondirectory (substring rcfile 0 -3))
+		       `(load ,rcfile)))))
 
 
 ;;; rcfiles.el ends here
