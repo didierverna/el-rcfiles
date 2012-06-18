@@ -47,7 +47,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(when (featurep 'xemacs) (require 'cl))
 
 
 (defvar rcfiles-version "1.0"
