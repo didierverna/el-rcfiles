@@ -1,11 +1,9 @@
-### local.mak --- Generic local toplevel makefile for XEmacs packages
+### local.mak --- Generic local toplevel makefile for Emacs libraries
 
 ## Copyright (C) 2007, 2012 Didier Verna.
 
-## Author:        Didier Verna <didier@xemacs.org>
-## Maintainer:    Didier Verna <didier@xemacs.org>
-## Created:       Wed Nov 21 18:09:35 2007
-## Last Revision: Fri Jan 13 22:24:02 2012
+## Author:     Didier Verna <didier@xemacs.org>
+## Maintainer: Didier Verna <didier@xemacs.org>
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 2,

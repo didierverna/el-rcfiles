@@ -4,7 +4,7 @@
 			  HOW TO INSTALL THE PACKAGE
 
 
-* Copyright (C) 2011 Didier Verna
+* Copyright (C) 2011, 2012 Didier Verna
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -13,27 +13,39 @@ notice and this notice are preserved.
 
 * Installation
 
-** Please note
+** Prerequisites
 You must use GNU Make with this standalone distribution.
 
 ** Edit Makefile.inc
-This file is located at the top of the distribution. It allows you to specify
-the Emacs executable and some auxiliary programs to use, the installation
-location and whether to install by symlink or copy.
+This file is located at the top of the distribution. Look at the various
+settings and adjust them as you see fit.
 
-** Build the package
-Type `make' to do that. This builds up the elc files and, if there is one, the
-documentation in info format.
+** Build the library
+Type `make' to do that. This step is optional if you plan on installing in one
+of the ways described below (it will be performed implicitely).
 
-** Install as an Emacs package
-Type `make install-pkg' to do that. If you want another kind of installation,
-you will have to use your little fingers.
+** Install the library
+There are three ways to install the library: either manually, or by using one
+of the methods below.
 
-** Other useful targets
-You can uninstall as a package by typing `make uninstall-pkg'. If there is
-one, you can build the documentation in other formats by typing `make FORMAT'
-in the doc/ subdirectory. FORMAT is one of `dvi', `ps', `pdf', `html'. The
-HTML version is built in its own .html subdirectory of doc/.
+- If you're installing for XEmacs, you must use `make install-pkg' to install
+  as an XEmacs package. Note that there is preliminary support for installing
+  as a GNU Emacs package, but it doesn't really work out of the box right now
+  (GNU Emacs doesn't support the notion of user-level packages yet).
+
+- If you're installing for GNU Emacs, you must use `make install'.
+
+** Uninstalling the library
+Depending on the installation type, you can uninstall with either `make
+uninstall' or `make uninstall-pkg'.
+
+** Additional documentation formats
+If the library provides some documentation, it is built as Info files by
+default. You can however build it in other formats by typing `make FORMAT' in
+the doc/ subdirectory. FORMAT is one of `dvi', `ps', `pdf', `html'. The HTML
+version is built in its own .html subdirectory of doc/.
+
+Note that only the Info documentation is automatically installed.
 
 
 	Have fun!

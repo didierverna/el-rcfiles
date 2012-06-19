@@ -1,11 +1,9 @@
-### local.mak --- Generic local lisp makefile for XEmacs packages
+### local.mak --- Generic local lisp makefile for Emacs libraries
 
-## Copyright (C) 2007 Didier Verna
+## Copyright (C) 2007, 2012 Didier Verna.
 
-## Author:        Didier Verna <didier@xemacs.org>
-## Maintainer:    Didier Verna <didier@xemacs.org>
-## Created:       Wed Nov 21 18:09:35 2007
-## Last Revision: Fri Dec 16 10:17:53 2011
+## Author:     Didier Verna <didier@xemacs.org>
+## Maintainer: Didier Verna <didier@xemacs.org>
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 2,

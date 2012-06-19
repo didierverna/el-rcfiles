@@ -1,12 +1,10 @@
-### Makefile --- Generic lisp makefile for XEmacs packages
+### Makefile --- Generic lisp makefile for Emacs libraries
 
-## Copyright (C) 2008, 2009, 2010, 2011 Didier Verna
+## Copyright (C) 2008, 2009, 2010, 2011, 2012 Didier Verna
 ## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Didier Verna
 
-## Author:        Didier Verna <didier@xemacs.org>
-## Maintainer:    Didier Verna <didier@xemacs.org>
-## Created:       Wed Mar  1 13:25:19 2000
-## Last Revision: Mon Jun 18 17:41:04 2012
+## Author:     Didier Verna <didier@xemacs.org>
+## Maintainer: Didier Verna <didier@xemacs.org>
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 2,
@@ -51,6 +49,12 @@ XEMACS_21_5 := $(shell if $(EMACS) --version \
 			 echo t;					\
 		       fi)
 
+# #### NOTE: the lisp files are not detected automatically. They must be
+# listed explicitely in Makefile.prj (which can, in turn detect them
+# automatically), because the compilation order might be important (e.g. for
+# getting macros). They are defined in $(EL_FILES).
+ELC_FILES    := $(EL_FILES:%.el=%.elc)
+
 ifeq ($(XEMACS),t)
 AUTOLOAD_FILE := auto-autoloads.el
 CUSLOAD_FILE  := custom-load.el
@@ -63,15 +67,13 @@ GEN_EL_FILES := $(AUTOLOAD_FILE) $(CUSLOAD_FILE)
 ifeq ($(XEMACS_21_5),t)
 GEN_EL_FILES += custom-defines.el
 endif
+GEN_ELC_FILES := $(GEN_EL_FILES:%.el=%.elc)
 
+ALL_EL_FILES  := $(EL_FILES)  $(GEN_EL_FILES)
+ALL_ELC_FILES := $(ELC_FILES) $(GEN_ELC_FILES)
 
-# #### NOTE: the lisp files are not detected automatically. They must be
-# listed explicitely in Makefile.prj (which can, in turn detect them
-# automatically), because the compilation order might be important (e.g. for
-# getting macros).
-ALL_EL_FILES := $(EL_FILES) $(GEN_EL_FILES)
-ELC_FILES    := $(ALL_EL_FILES:%.el=%.elc)
-EL_DIR       := $(PKG_DIR)/lisp/$(PROJECT)
+EL_STD_DIR       := $(PREFIX)/share/emacs/site-lisp
+EL_PKG_DIR       := $(PKG_DIR)/lisp/$(PROJECT)
 
 # For the compiler to find the require'd files:
 ifeq ($(XEMACS),t)
@@ -84,41 +86,44 @@ endif
 #### it shouldn't be.
 -include Makefile.inc
 
-ifeq ($(XEMACS_21_5),t)
-all: autoloads custom-load custom-defines elc
+ifeq ($(XEMACS),t)
+all: all-elc-files
 else
-all: autoloads custom-load elc
+all: elc-files
 endif
 
-autoloads: $(AUTOLOAD_FILE)
+elc-files: $(ELC_FILES)
+all-elc-files: $(ALL_ELC_FILES)
 
-custom-load: $(CUSLOAD_FILE)
-
-ifeq ($(XEMACS_21_5),t)
-custom-defines: custom-defines.el
-endif
-
-elc: $(ELC_FILES)
-
-install-pkg: $(ELC_FILES)
-	install -d -m 755 $(EL_DIR)
+install: elc-files
+	install -d -m 755 $(EL_STD_DIR)
 ifeq ($(SYMLINK),)
-	install -m 644 $(ALL_EL_FILES) $(ELC_FILES) $(EL_DIR)/
+	install -m 644 $(EL_FILES) $(ELC_FILES) $(EL_STD_DIR)/
 else
-	ln -fs $(abspath $(ALL_EL_FILES)) $(abspath $(ELC_FILES)) $(EL_DIR)/
+	ln -fs $(abspath $(EL_FILES)) $(abspath $(ELC_FILES)) $(EL_STD_DIR)/
+endif
+
+uninstall:
+	test -d $(EL_STD_DIR) \
+	  && cd $(EL_STD_DIR) && rm -f $(ELC_FILES) $(EL_FILES)
+
+install-pkg: all-elc-files
+	install -d -m 755 $(EL_PKG_DIR)
+ifeq ($(SYMLINK),)
+	install -m 644 $(ALL_EL_FILES) $(ALL_ELC_FILES) $(EL_PKG_DIR)/
+else
+	ln -fs $(abspath $(ALL_EL_FILES)) $(abspath $(ALL_ELC_FILES)) \
+	  $(EL_PKG_DIR)/
 endif
 
 uninstall-pkg:
-	test -d $(EL_DIR) && rm -fr $(EL_DIR)
+	test -d $(EL_PKG_DIR) && rm -fr $(EL_PKG_DIR)
 
 clean:
 	-rm *~
 
 distclean: clean
-	-rm -f *.elc $(AUTOLOAD_FILE) $(CUSLOAD_FILE)
-ifeq ($(XEMACS_21_5),t)
-	-rm custom-defines.el
-endif
+	-rm -f $(ALL_ELC_FILES) $(GEN_EL_FILES)
 
 $(AUTOLOAD_FILE): $(EL_FILES)
 ifeq ($(XEMACS_21_5),t)
@@ -162,9 +167,9 @@ else
 	$(EMACS) --batch $(ADD_MY_PATH) -f batch-byte-compile $<
 endif
 
-.PHONY: all autoloads custom-load custom-defines			\
-	elc								\
-	install-pkg uninstall-pkg clean distclean			\
+.PHONY: all								\
+	elc-files all-elc-files						\
+	install uninstall install-pkg uninstall-pkg clean distclean	\
 	../Makefile.prj ../Makefile.inc Makefile.prj Makefile.inc	\
 	../local.prj ../local.inc local.inc local.mak
 
