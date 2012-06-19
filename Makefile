@@ -40,17 +40,23 @@ include Makefile.inc
 all:
 	$(MAKE) gen TARGET=all
 
+# #### NOTE: this one is needed because we have an INSTALL file in this
+# directory, and this will conflict with a default install target on OSX where
+# file names are case-insensitive.
+install:
+	$(MAKE) gen TARGET=install
+
 gen:
 	@for i in $(SUBDIRS) ; do                 \
 	   echo "making $(TARGET) in $${i} ..." ; \
 	   ( cd $${i} && $(MAKE) $(TARGET) ) ;    \
 	 done
 
-# [un]install-pkg clean distclean
+# uninstall [un]install-pkg clean distclean
 .DEFAULT:
 	$(MAKE) gen TARGET=$@
 
-.PHONY: all gen				\
+.PHONY: all gen install			\
 	Makefile.prj Makefile.inc	\
 	local.prj local.inc local.mak
 
