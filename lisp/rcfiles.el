@@ -1,23 +1,21 @@
 ;;; rcfiles.el --- Unix-like rc files for Emacs Lisp libraries
 
-;; Copyright (C) 2006, 2007 Didier Verna.
+;; Copyright (C) 2006, 2007, 2012 Didier Verna
 
-;; Author:        Didier Verna <didier@xemacs.org>
-;; Maintainer:    Didier Verna <didier@xemacs.org>
-;; Created:       Mon Sep  4 14:32:33 2006
-;; Last Revision: Tue Apr 24 18:01:06 2007
+;; Author:        Didier Verna <didier@didierverna.net>
+;; Maintainer:    Didier Verna <didier@didierverna.net>
 ;; Keywords:
 
 ;; This file is part of RCFiles.
 
-;; RCFiles is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License version 2,
-;; as published by the Free Software Foundation.
+;; RCFiles is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License version 3, as
+;; published by the Free Software Foundation.
 
-;; RCFiles is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+;; RCFiles is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, write to the Free Software
@@ -26,27 +24,36 @@
 
 ;;; Commentary:
 
-;; The purpose of RCFiles is to provide the equivalent of traditional Unix rc
-;; files to Emacs Lisp: each time a library foo is loaded, RCFiles
-;; additionally tries to load a library named foo-rc. This is a nice way to
-;; put dynamic customizations or additions to the library, without cluttering
-;; your initialization file with eval-after-load forms.
+;; The purpose of RCFiles is to provide the equivalent of traditional
+;; Unix rc files (i.e. configuration files) for Emacs Lisp
+;; libraries. The advantages of using configuration files are the
+;; following:
+;;   - your initialization file is less bloated,
+;;   - since configuration files are lazily loaded, your Emacs session
+;;     is (or begins) lighter. That is unless you already use lots of
+;;     EVAL-AFTER-LOAD forms...
 
 
 ;;; Usage:
 
-;; To provide an rc file for a library foo, write code in a file named
-;; foo<RCFILES-PSEUDO-EXTENSION>.el and put it in RCFILES-DIRECTORY. Both the
-;; directory and the pseudo-extension are customizable.
+;; 0. Assuming the library is properly installed (see the INSTALL file
+;; in the distribution), you may want to (require 'rcfiles-autoloads)
+;; in your GNU Emacs initialization file. For XEmacs, there is nothing
+;; special to do.
 
-;; To use RCFiles, put (rcfiles-register-rc-files) in your Emacs
-;; initialization file. This function can also be called anytime you want to
-;; update both your list of rc files, and your initialization forms.
+;; 1. Load the library, go to the rcfiles Custom group and tweak.
+
+;; 2. Put a call to (rcfiles-register-rc-files) in your initialization
+;; file. This function can also be called interactively anytime you
+;; add, remove or modify a configuration file.
+
+;; 3. Put your configuration code for a library foo in a file called
+;; <RCFILES-DIRECTORY>/foo<RCFILES-PSEUDO-EXTENSION>.el.
 
 
 ;;; Code:
 
-(when (featurep 'xemacs) (require 'cl))
+(require 'cl)
 
 
 (defvar rcfiles-version "1.0"
@@ -59,41 +66,75 @@
 
 
 (defgroup rcfiles nil
-  "Emacs Lisp initialization files management."
+  "Configuration files for Emacs Lisp libraries."
   :group 'emacs)
 
 (defcustom rcfiles-directory
   (if (featurep 'xemacs) "~/.xemacs/rc" "~/.emacs.d/rc")
-  "*Directory where RCFiles looks for initialization files."
+  "Directory where RCFiles looks for configuration files."
   :group 'rcfiles
   :type 'string)
 
 (defcustom rcfiles-pseudo-extension "-rc"
-  "*Pseudo extension for initialization files.
-
-This extension is added after the name of the original library, and
-before the .el extension."
+  "Pseudo extension for configuration files.
+It is added between the name of the library and the .el
+extension."
   :group 'rcfiles
   :type 'string)
 
+(defun rcfiles-rc-files ()
+  "Return the list of configuration files currently available.
+File names are expanded but their extension is removed."
+  (let ((ext-regexp
+	 (concat (regexp-quote rcfiles-pseudo-extension) "\\.el[c]?$")))
+    (mapcar #'file-name-sans-extension
+	    ;; #### NOTE: potential duplicates (such as when there is
+	    ;; both a .el and a .elc file) are not a problem because
+	    ;; EVAL-AFTER-LOAD takes care of that.
+	    (directory-files rcfiles-directory ext-regexp))))
+
+(defun rcfiles-prune (rcfiles)
+  "Unregister configuration files not in RCFILES."
+  (let ((dir
+	 (concat "^" (regexp-quote (expand-file-name rcfiles-directory)))))
+    (setq after-load-alist
+	  (remove-if (lambda (file)
+		       (and (stringp file)
+			    (string-match dir file)
+			    (not (member file rcfiles))))
+		     after-load-alist
+		     :key (lambda (form)
+			    (ignore-errors
+			      (let ((load-form
+				     ;; are we having fun yet?
+				     (caddr (cadr (cadr (cadr form))))))
+				(when (eq (car load-form) 'rcfiles-try-load)
+				  (cadr load-form)))))))))
+
+(defun rcfiles-try-load (rcfile)
+  "Attempt to load RCFILE. If loading fails, throw a warning."
+  (condition-case ignore (load rcfile)
+    (error (warn (format "Unable to load %s.
+Maybe you need to call RCFILES-REGISTER-RC-FILES again?"
+			 rcfile)))))
+
+(defun rcfiles-register (rcfiles)
+  "Register the configuration files in the RCFILES list."
+  (let ((len (length rcfiles-pseudo-extension)))
+    (dolist (rcfile rcfiles)
+      (eval-after-load (file-name-nondirectory (substring rcfile 0 (- len)))
+	`(rcfiles-try-load ,rcfile)))))
+
 ;;;###autoload
 (defun rcfiles-register-rc-files ()
-  "*Register rc files for loading after the corresponding library."
+  "Register the configuration files currently available.
+This function can be called at startup and every time the
+registration changes. Obsolete entries are removed and new ones
+are added."
   (interactive)
-  (let* ((ext-regexp (concat (regexp-quote rcfiles-pseudo-extension)
-			     "\\.el[c]?$"))
-	 (rcfiles
-	   (mapcar #'(lambda (file) (file-name-sans-extension file))
-		   ;; #### NOTE: this will break if someone puts a non elisp
-		   ;; file named *.el[c] in that directory, but this would be
-		   ;; a really bad idea. Also note that potential duplicates
-		   ;; (such as when there is both a .el and a .elc file) are
-		   ;; not a problem because EVAL-AFTER-LOAD takes care of
-		   ;; that.
-		   (directory-files rcfiles-directory ext-regexp))))
-    (dolist (rcfile rcfiles)
-      (eval-after-load (file-name-nondirectory (substring rcfile 0 -3))
-		       `(load ,rcfile)))))
+  (let ((rcfiles (rcfiles-rc-files)))
+    (rcfiles-prune rcfiles)
+    (rcfiles-register rcfiles)))
 
 
 (provide 'rcfiles)
