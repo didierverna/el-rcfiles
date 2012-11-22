@@ -1,9 +1,9 @@
-### Makefile.inc --- toplevel configuration makefile for Emacs libraries
-
-## Author:     Didier Verna <didier@xemacs.org>
-## Maintainer: Didier Verna <didier@xemacs.org>
+### Makefile.inc --- Generic toplevel include makefile for Emacs Lisp libraries
 
 ## Copyright (C) 2011, 2012 Didier Verna
+
+## Author:     Didier Verna <didier@didierverna.net>
+## Maintainer: Didier Verna <didier@didierverna.net>
 
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -27,12 +27,13 @@ PREFIX := /usr/local
 
 # Package directory for installation as an (X)Emacs package. Note that support
 # for GNU Emacs doesn't really work here (see INSTALL).
+PKG_PREFIX := $(PREFIX)
 # GNU Emacs:
-# PKG_DIR := /usr/local/share/emacs/site-packages
+# PKG_DIR := $(PKG_PREFIX)/share/emacs/site-packages
 # XEmacs 21.4:
-PKG_DIR := /usr/local/lib/xemacs/site-packages
+PKG_DIR := $(PKG_PREFIX)/lib/xemacs/site-packages
 # XEmacs 21.5:
-# PKG_DIR := /usr/local/share/xemacs/site-packages
+# PKG_DIR := $(PKG_PREFIX)/share/xemacs/site-packages
 
 # Set to t if you want a symlink installation
 SYMLINK :=

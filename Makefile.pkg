@@ -1,14 +1,12 @@
-### Makefile --- for packages in the XEmacs package infrastructure
+### Makefile --- Generic makefile for XEmacs packages
 
-## Copyright (C) 2012 Didier Verna.
+## Copyright (C) 2012 Didier Verna
 
-## Author:        Didier Verna <didier@xemacs.org>
-## Maintainer:    Didier Verna <didier@xemacs.org>
-## Created:       Wed Mar  1 13:23:24 2000
-## Last Revision: Mon Jan 16 10:49:38 2012
+## Author:     Didier Verna <didier@didierverna.net>
+## Maintainer: Didier Verna <didier@didierverna.net>
 
 ## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License version 2,
+## it under the terms of the GNU General Public License version 3,
 ## as published by the Free Software Foundation.
 
 ## This program is distributed in the hope that it will be useful,
@@ -43,7 +41,7 @@ PACKAGE_SUPPRESS =
 
 VERSION        =
 AUTHOR_VERSION =
-MAINTAINER     = Didier Verna <didier@xemacs.org>
+MAINTAINER     = Didier Verna <didier@didierverna.net>
 
 ELCS                 = $(EL_FILES:%.el=lisp/%.elc)
 ELCS_1               =
@@ -53,8 +51,8 @@ GENERATED_LISP       =
 PRELOADS             =
 AUTOLOAD_PATH        = lisp
 
-# #### WARNING: note the := here. This is needed because XEmacs.rules in turn
-# #### sets its own version of TEXI_FILES back to EXPLICIT_DOCS.
+# #### WARNING: note the := here. This is needed because XEmacs.rules
+# in turn sets its own version of TEXI_FILES back to EXPLICIT_DOCS.
 EXPLICIT_DOCS         := $(TEXI_FILES:%=doc/%)
 STANDARD_DOCS          =
 EXTRA_TEXI_FILES       =

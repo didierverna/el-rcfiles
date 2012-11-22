@@ -1,11 +1,21 @@
-# .hg filemap --- File information for 'hg convert'.
+### .hg filemap --- File information for 'hg convert'
 
-# Copyright (C) 2012 Didier Verna.
+## Copyright (C) 2012 Didier Verna
 
-# Copying and distribution of this file, with or without modification,
-# are permitted in any medium without royalty provided the copyright
-# notice and this notice are preserved.
+## Author:     Didier Verna <didier@didierverna.net>
+## Maintainer: Didier Verna <didier@didierverna.net>
 
+## Copying and distribution of this file, with or without modification,
+## are permitted in any medium without royalty provided the copyright
+## notice and this notice are preserved.
+
+
+### Commentary:
+
+## Contents management by FCM version 0.1.
+
+
+### Code:
 
 exclude .hgauthormap
 exclude .hgfilemap
@@ -34,4 +44,4 @@ exclude etc/local.inc
 exclude etc/Makefile
 
 
-# .hgconvert ends here
+### .hgconvert ends here

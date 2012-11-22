@@ -1,13 +1,13 @@
-### Makefile --- Generic lisp makefile for Emacs libraries
+### Makefile --- Lisp generic makefile for Emacs Lisp libraries
 
 ## Copyright (C) 2008, 2009, 2010, 2011, 2012 Didier Verna
 ## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Didier Verna
 
-## Author:     Didier Verna <didier@xemacs.org>
-## Maintainer: Didier Verna <didier@xemacs.org>
+## Author:     Didier Verna <didier@didierverna.net>
+## Maintainer: Didier Verna <didier@didierverna.net>
 
 ## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License version 2,
+## it under the terms of the GNU General Public License version 3,
 ## as published by the Free Software Foundation.
 
 ## This program is distributed in the hope that it will be useful,
@@ -60,14 +60,18 @@ AUTOLOAD_FILE := auto-autoloads.el
 CUSLOAD_FILE  := custom-load.el
 else
 AUTOLOAD_FILE := $(PROJECT)-autoloads.el
-CUSLOAD_FILE  := cus-load.el
+CUSLOAD_FILE :=
 endif
 
 GEN_EL_FILES := $(AUTOLOAD_FILE) $(CUSLOAD_FILE)
 ifeq ($(XEMACS_21_5),t)
-GEN_EL_FILES += custom-defines.el
+GEN_EL_FILES +=  custom-defines.el
 endif
+ifeq ($(XEMACS),t)
 GEN_ELC_FILES := $(GEN_EL_FILES:%.el=%.elc)
+else
+GEN_ELC_FILES :=
+endif
 
 ALL_EL_FILES  := $(EL_FILES)  $(GEN_EL_FILES)
 ALL_ELC_FILES := $(ELC_FILES) $(GEN_ELC_FILES)
@@ -86,28 +90,27 @@ endif
 #### it shouldn't be.
 -include Makefile.inc
 
-ifeq ($(XEMACS),t)
-all: all-elc-files
-else
-all: elc-files
-endif
+all: gen-el-files all-elc-files
 
-elc-files: $(ELC_FILES)
+gen-el-files: $(GEN_EL_FILES)
+
 all-elc-files: $(ALL_ELC_FILES)
 
-install: elc-files
+install: all
 	install -d -m 755 $(EL_STD_DIR)
 ifeq ($(SYMLINK),)
-	install -m 644 $(EL_FILES) $(ELC_FILES) $(EL_STD_DIR)/
+	install -m 644 $(ALL_EL_FILES) $(ALL_ELC_FILES) $(EL_STD_DIR)/
 else
-	ln -fs $(abspath $(EL_FILES)) $(abspath $(ELC_FILES)) $(EL_STD_DIR)/
+	ln -fs $(abspath $(ALL_EL_FILES)) $(abspath $(ALL_ELC_FILES)) \
+          $(EL_STD_DIR)/
 endif
 
 uninstall:
 	test -d $(EL_STD_DIR) \
-	  && cd $(EL_STD_DIR) && rm -f $(ELC_FILES) $(EL_FILES)
+	  && cd $(EL_STD_DIR) \
+          && rm -f $(ALL_ELC_FILES) $(ALL_EL_FILES)
 
-install-pkg: all-elc-files
+install-pkg: all
 	install -d -m 755 $(EL_PKG_DIR)
 ifeq ($(SYMLINK),)
 	install -m 644 $(ALL_EL_FILES) $(ALL_ELC_FILES) $(EL_PKG_DIR)/

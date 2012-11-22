@@ -1,7 +1,7 @@
                                                                -*- outline -*-
 
 
-			  HOW TO INSTALL THE PACKAGE
+		      HOW TO INSTALL THE LIBRARY
 
 
 * Copyright (C) 2011, 2012 Didier Verna
@@ -25,15 +25,14 @@ Type `make' to do that. This step is optional if you plan on installing in one
 of the ways described below (it will be performed implicitely).
 
 ** Install the library
-There are three ways to install the library: either manually, or by using one
-of the methods below.
+There are two ways to install the library automatically.
+
+- If you're installing for GNU Emacs, you must use `make install'.
 
 - If you're installing for XEmacs, you must use `make install-pkg' to install
   as an XEmacs package. Note that there is preliminary support for installing
   as a GNU Emacs package, but it doesn't really work out of the box right now
   (GNU Emacs doesn't support the notion of user-level packages yet).
-
-- If you're installing for GNU Emacs, you must use `make install'.
 
 ** Uninstalling the library
 Depending on the installation type, you can uninstall with either `make
@@ -51,4 +50,4 @@ Note that only the Info documentation is automatically installed.
 	Have fun!
 
 --
-Didier Verna, didier@xemacs.org, http://www.lrde.epita.fr/~didier
+Didier Verna, didier@didierverna.net, http://www.lrde.epita.fr/~didier
