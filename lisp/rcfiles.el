@@ -91,7 +91,7 @@ File names are expanded but their extension is removed."
 	    ;; #### NOTE: potential duplicates (such as when there is
 	    ;; both a .el and a .elc file) are not a problem because
 	    ;; EVAL-AFTER-LOAD takes care of that.
-	    (directory-files rcfiles-directory ext-regexp))))
+	    (directory-files rcfiles-directory t ext-regexp))))
 
 (defun rcfiles-prune (rcfiles)
   "Unregister configuration files not in RCFILES."
