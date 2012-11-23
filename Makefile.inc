@@ -18,20 +18,25 @@
 # Path to your version of Emacs:
 EMACS := emacs
 
-# Prefix for standard GNU Emacs installation with `make install'. Installation
-# will use the following subdirectories:
+# Prefix for standard GNU Emacs installation with `make install'.
+# Installation will use the following subdirectories:
 # PREFIX/share/emacs/site-lisp/
 # PREFIX/info/
 # PREFIX/etc/
 PREFIX := /usr/local
 
-# Package directory for installation as an (X)Emacs package. Note that support
-# for GNU Emacs doesn't really work here (see INSTALL).
+# Package prefix and directory for (X)Emacs package installation.
+# Installation will use the following subdirectories:
+# PKG_DIR/lisp/<project>/
+# PKG_DIR/info/
+# PKG_DIR/etc/<project>/
+# Note that GNU Emacs doesn't really understand this "package"
+# notion. You need some stuff in your initialization file to make it work.
 PKG_PREFIX := $(PREFIX)
 # GNU Emacs:
-# PKG_DIR := $(PKG_PREFIX)/share/emacs/site-packages
+PKG_DIR := $(PKG_PREFIX)/share/emacs/site-packages
 # XEmacs 21.4:
-PKG_DIR := $(PKG_PREFIX)/lib/xemacs/site-packages
+# PKG_DIR := $(PKG_PREFIX)/lib/xemacs/site-packages
 # XEmacs 21.5:
 # PKG_DIR := $(PKG_PREFIX)/share/xemacs/site-packages
 
