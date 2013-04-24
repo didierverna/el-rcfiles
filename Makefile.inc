@@ -1,9 +1,8 @@
 ### Makefile.inc --- Generic toplevel include makefile for Emacs Lisp libraries
 
-## Copyright (C) 2011, 2012 Didier Verna
+## Copyright (C) 2011-2013 Didier Verna
 
-## Author:     Didier Verna <didier@didierverna.net>
-## Maintainer: Didier Verna <didier@didierverna.net>
+## Author: Didier Verna <didier@didierverna.net>
 
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -34,7 +33,7 @@ PREFIX := /usr/local
 # notion. You need some stuff in your initialization file to make it work.
 PKG_PREFIX := $(PREFIX)
 # GNU Emacs:
-PKG_DIR := $(PKG_PREFIX)/share/emacs/site-packages
+PKG_DIR := $(PKG_PREFIX)/share/emacs/local-packages
 # XEmacs 21.4:
 # PKG_DIR := $(PKG_PREFIX)/lib/xemacs/site-packages
 # XEmacs 21.5:
