@@ -138,9 +138,9 @@ else ifeq ($(XEMACS),t)
 	  -f batch-update-directory .
 else
 	$(EMACS) --batch --load autoload	\
-	  --eval '(let ((generated-autoload-file \
-			 "$(abspath $(AUTOLOAD_FILE))"))\
-		    (update-directory-autoloads "."))'
+	  --eval "(let ((generated-autoload-file \
+			 \"$(abspath $(AUTOLOAD_FILE))\")) \
+		    (update-directory-autoloads \".\"))"
 endif
 	@rm -f $@~
 	@touch $@
