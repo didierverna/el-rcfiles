@@ -1,9 +1,8 @@
-### local.mak --- Lisp generic local makefile for Emacs Lisp libraries
+### local.mak --- Local lisp/ makefile for Emacs Lisp libraries
 
-## Copyright (C) 2007, 2012 Didier Verna
+## Copyright (C) 2007, 2012, 2013 Didier Verna
 
-## Author:     Didier Verna <didier@didierverna.net>
-## Maintainer: Didier Verna <didier@didierverna.net>
+## Author: Didier Verna <didier@didierverna.net>
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 3,

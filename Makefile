@@ -1,10 +1,8 @@
 ### Makefile --- Generic toplevel makefile for Emacs Lisp libraries
 
-## Copyright (C) 2008, 2009, 2010, 2011, 2012 Didier Verna
-## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Didier Verna
+## Copyright (C) 2000-2013 Didier Verna
 
-## Author:     Didier Verna <didier@didierverna.net>
-## Maintainer: Didier Verna <didier@didierverna.net>
+## Author: Didier Verna <didier@didierverna.net>
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 3,
