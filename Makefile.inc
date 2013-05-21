@@ -14,7 +14,7 @@
 
 ### Code:
 
-# Path to your version of Emacs:
+# Path to your version of (X)Emacs:
 EMACS := emacs
 
 # Prefix for standard GNU Emacs installation with `make install'.
@@ -24,13 +24,12 @@ EMACS := emacs
 # PREFIX/etc/
 PREFIX := /usr/local
 
-# Package prefix and directory for (X)Emacs package installation.
+# Prefix and directory for package-style installation with `make install-pkg'
+# (see the INSTALL file for more information).
 # Installation will use the following subdirectories:
 # PKG_DIR/lisp/<project>/
 # PKG_DIR/info/
 # PKG_DIR/etc/<project>/
-# Note that GNU Emacs doesn't really understand this "package"
-# notion. You need some stuff in your initialization file to make it work.
 PKG_PREFIX := $(PREFIX)
 # GNU Emacs:
 PKG_DIR := $(PKG_PREFIX)/share/emacs/local-packages

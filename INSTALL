@@ -1,4 +1,4 @@
-                                                               -*- outline -*-
+							       -*- outline -*-
 
 
 		      HOW TO INSTALL THE LIBRARY
@@ -27,12 +27,13 @@ of the ways described below (it will be performed implicitely).
 ** Install the library
 There are two ways to install the library automatically.
 
-- If you're installing for GNU Emacs, you must use `make install'.
+1. Standard installation for GNU Emacs is done via `make install'.
+2. Package style installation for XEmacs is done via `make install-pkg'.
 
-- If you're installing for XEmacs, you must use `make install-pkg' to install
-  as an XEmacs package. Note that there is preliminary support for installing
-  as a GNU Emacs package, but it doesn't really work out of the box right now
-  (GNU Emacs doesn't support the notion of user-level packages yet).
+Note that you can also perform an XEmacs package-style installation with GNU
+Emacs (nothing to do with ELPA), but this will not work out of the box. You
+will need some tweaks in your init file (see this blog for more information:
+http://www.didierverna.net/blog/index.php?post/2013/05/14/Emacs-session-bootstrap-tweaks).
 
 ** Uninstalling the library
 Depending on the installation type, you can uninstall with either `make
@@ -41,8 +42,8 @@ uninstall' or `make uninstall-pkg'.
 ** Additional documentation formats
 If the library provides some documentation, it is built as Info files by
 default. You can however build it in other formats by typing `make FORMAT' in
-the doc/ subdirectory. FORMAT is one of `dvi', `ps', `pdf', `html'. The HTML
-version is built in its own .html subdirectory of doc/.
+the doc/ subdirectory, FORMAT being one of `dvi', `ps', `pdf', `html'. The
+HTML version is built in its own .html subdirectory of doc/.
 
 Note that only the Info documentation is automatically installed.
 
