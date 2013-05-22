@@ -6,13 +6,13 @@
 ;; Maintainer:    Didier Verna <didier@didierverna.net>
 ;; Keywords:
 
-;; This file is part of RCFiles.
+;; This file is part of el-rcfiles.
 
-;; RCFiles is free software; you can redistribute it and/or modify it
+;; el-rcfiles is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License version 3, as
 ;; published by the Free Software Foundation.
 
-;; RCFiles is distributed in the hope that it will be useful, but
+;; el-rcfiles is distributed in the hope that it will be useful, but
 ;; WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
@@ -24,7 +24,7 @@
 
 ;;; Commentary:
 
-;; The purpose of RCFiles is to provide the equivalent of traditional
+;; The purpose of el-rcfiles is to provide the equivalent of traditional
 ;; Unix rc files (i.e. configuration files) for Emacs Lisp
 ;; libraries. The advantages of using configuration files are the
 ;; following:
@@ -57,10 +57,10 @@
 
 
 (defvar rcfiles-version "1.0"
-  "Current version number of RCFiles.")
+  "Current version number of el-rcfiles.")
 
 (defun rcfiles-version ()
-  "Show the current version number of RCFiles."
+  "Show the current version number of el-rcfiles."
   (interactive)
   (message "%s" rcfiles-version))
 
@@ -71,7 +71,7 @@
 
 (defcustom rcfiles-directory
   (if (featurep 'xemacs) "~/.xemacs/rc" "~/.emacs.d/rc")
-  "Directory where RCFiles looks for configuration files."
+  "Directory where el-rcfiles looks for configuration files."
   :group 'rcfiles
   :type 'string)
 
