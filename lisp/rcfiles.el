@@ -1,9 +1,8 @@
 ;;; rcfiles.el --- Unix-like rc files for Emacs Lisp libraries
 
-;; Copyright (C) 2006, 2007, 2012 Didier Verna
+;; Copyright (C) 2006, 2007, 2012, 2013 Didier Verna
 
-;; Author:        Didier Verna <didier@didierverna.net>
-;; Maintainer:    Didier Verna <didier@didierverna.net>
+;; Author: Didier Verna <didier@didierverna.net>
 ;; Keywords:
 
 ;; This file is part of el-rcfiles.
@@ -36,19 +35,14 @@
 
 ;;; Usage:
 
-;; 0. Assuming the library is properly installed (see the INSTALL file
-;; in the distribution), you may want to (require 'rcfiles-autoloads)
-;; in your GNU Emacs initialization file. For XEmacs, there is nothing
-;; special to do.
-
-;; 1. Load the library, go to the rcfiles Custom group and tweak.
+;; 1. Load the library, go to the rcfiles Custom group and tweak (or not).
 
 ;; 2. Put a call to (rcfiles-register-rc-files) in your initialization
 ;; file. This function can also be called interactively anytime you
 ;; add, remove or modify a configuration file.
 
-;; 3. Put your configuration code for a library foo in a file called
-;; <RCFILES-DIRECTORY>/foo<RCFILES-PSEUDO-EXTENSION>.el.
+;; 3. Put your configuration code for a library `foo' in a file called
+;; `<RCFILES-DIRECTORY>/foo<RCFILES-PSEUDO-EXTENSION>.el'.
 
 
 ;;; Code:
