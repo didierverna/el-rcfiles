@@ -17,7 +17,8 @@
 # Local redefinitions:
 
 # Local additions:
-WWW_DIR := ${HOME}/www/software/elisp/$(PROJECT)
+WWW_HOST := www
+WWW_DIR := ~/www/software/elisp/$(PROJECT)
 
 
 ## Local Variables:

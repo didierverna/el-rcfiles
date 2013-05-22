@@ -47,30 +47,33 @@ distclean:
 	$(MAKE) gen TARGET=distclean
 
 install-www: dist
-	echo "$(VERSION)" > $(WWW_DIR)/version.txt
-	chmod 644 $(WWW_DIR)/version.txt
-	install -m 644 NEWS $(WWW_DIR)/news.txt
-	install -m 644 $(TARBALL)   "$(WWW_DIR)/attic/"
-	install -m 644 $(SIGNATURE) "$(WWW_DIR)/attic/"
+	echo "$(VERSION)" > /tmp/version.txt
+	chmod 644 /tmp/version.txt
+	scp -p /tmp/version.txt $(WWW_HOST):$(WWW_DIR)/
+	scp -p NEWS             $(WWW_HOST):$(WWW_DIR)/news.txt
+	scp -p $(TARBALL)       $(WWW_HOST):$(WWW_DIR)/attic/
+	scp -p $(SIGNATURE)     $(WWW_HOST):$(WWW_DIR)/attic/
 	echo "\
 <? lref (\"$(PROJECT)/attic/$(TARBALL)\", \
 	 contents (\"Dernière version\", \"Latest version\")); ?> \
 | \
 <? lref (\"$(PROJECT)/attic/$(SIGNATURE)\", \
 	 contents (\"Signature GPG\", \"GPG Signature\")); ?>" \
-	  > "$(WWW_DIR)/latest.txt"
-	chmod 644 "$(WWW_DIR)/latest.txt"
-	git push "$(WWW_DIR)/$(PROJECT).git"
+	  > /tmp/latest.txt
+	chmod 644 /tmp/latest.txt
+	scp -p /tmp/latest.txt  $(WWW_HOST):$(WWW_DIR)/
+	git push --tags
 	$(MAKE) gen TARGET=install-www
-	cd "$(WWW_DIR)"					\
-	  && ln -fs attic/$(TARBALL) latest.tar.gz	\
-	  && ln -fs attic/$(SIGNATURE) latest.tar.gz.asc
+	ssh $(WWW_HOST)					\
+	  'cd $(WWW_DIR)					\
+	   && ln -fs attic/$(TARBALL) latest.tar.gz		\
+	   && ln -fs attic/$(SIGNATURE) latest.tar.gz.asc'
 
 uninstall-www:
-	-rm -fr $(WWW_DIR)
+	ssh $(WWW_HOST) 'rm -fr $(WWW_DIR)'
 
 $(TARBALL):
-	git archive --format=tgz --prefix=$(DIST_NAME)/	-o $@ HEAD
+	git archive --format=tgz --prefix=$(DIST_NAME)/ -o $@ HEAD
 
 $(SIGNATURE): $(TARBALL)
 	gpg -b -a $<
