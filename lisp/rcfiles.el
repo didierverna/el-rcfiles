@@ -42,7 +42,7 @@
 ;; add, remove or modify a configuration file.
 
 ;; 3. Put your configuration code for a library `foo' in a file called
-;; `<RCFILES-DIRECTORY>/foo<RCFILES-PSEUDO-EXTENSION>.el'.
+;; `<rcfiles-directory>/foo<rcfiles-pseudo-extension>.el'.
 
 
 ;;; Code:
