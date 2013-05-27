@@ -62,7 +62,6 @@ install-www: dist
 	  > /tmp/latest.txt
 	chmod 644 /tmp/latest.txt
 	scp -p /tmp/latest.txt  $(WWW_HOST):$(WWW_DIR)/
-	git push --tags
 	$(MAKE) gen TARGET=install-www
 	ssh $(WWW_HOST)					\
 	  'cd $(WWW_DIR)					\
@@ -72,13 +71,21 @@ install-www: dist
 uninstall-www:
 	ssh $(WWW_HOST) 'rm -fr $(WWW_DIR)'
 
+install-elpa:
+ifeq ($(SIMPLE),)
+	@echo "#### FIXME: not implemented for multi-file packages yet"
+else
+	cd lisp && $(MAKE) install-elpa
+endif
+
 $(TARBALL):
 	git archive --format=tgz --prefix=$(DIST_NAME)/ -o $@ HEAD
 
 $(SIGNATURE): $(TARBALL)
 	gpg -b -a $<
 
-.PHONY: tag convert tgz gpg dist distclean install-www uninstall-www
+.PHONY: tag convert tgz gpg dist distclean \
+	install-www uninstall-www install-elpa
 
 
 ### local.mak ends here

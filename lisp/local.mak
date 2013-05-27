@@ -29,7 +29,20 @@
 
 install-www:
 
-.PHONY: install-www
+install-elpa:
+ifeq ($(SIMPLE),)
+	echo "Please call install-elpa from the toplevel directory."
+else
+	$(EMACS) --kill -nw --eval "(require 'package-x)" \
+			    --eval '(package-upload-file "$(EL_FILES)")'
+endif
+
+update-version:
+	perl -pi -e 's/;; Version: .*/;; Version: $(VERSION)/' $(EL_FILES)
+	perl -pi -e 's/defvar $(PROJECT)-version .*/defvar $(PROJECT)-version "$(VERSION)"/' $(EL_FILES)
+
+
+.PHONY: update-version install-www install-elpa
 
 
 ### local.mak ends here
