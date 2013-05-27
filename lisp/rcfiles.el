@@ -3,7 +3,8 @@
 ;; Copyright (C) 2006, 2007, 2012, 2013 Didier Verna
 
 ;; Author: Didier Verna <didier@didierverna.net>
-;; Keywords:
+;; Version: 1.0
+;; Keywords: extensions, lisp
 
 ;; This file is part of el-rcfiles.
 
