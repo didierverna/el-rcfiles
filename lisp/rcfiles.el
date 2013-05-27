@@ -33,17 +33,14 @@
 ;;     is (or begins) lighter. That is unless you already use lots of
 ;;     EVAL-AFTER-LOAD forms...
 
-
-;;; Usage:
+;; Usage:
 
 ;; 1. Load the library, go to the rcfiles Custom group and tweak (or not).
-
 ;; 2. Put a call to (rcfiles-register-rc-files) in your initialization
-;; file. This function can also be called interactively anytime you
-;; add, remove or modify a configuration file.
-
+;;    file. This function can also be called interactively anytime you
+;;    add, remove or modify a configuration file.
 ;; 3. Put your configuration code for a library `foo' in a file called
-;; `<rcfiles-directory>/foo<rcfiles-pseudo-extension>.el'.
+;;    `<rcfiles-directory>/foo<rcfiles-pseudo-extension>.el'.
 
 
 ;;; Code:
