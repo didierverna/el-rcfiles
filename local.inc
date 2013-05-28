@@ -14,11 +14,14 @@
 
 ### Code:
 
-# Local redefinitions:
 
-# Local additions:
+DIST_NAME := el-$(PROJECT)-$(VERSION)
+TARBALL   := $(DIST_NAME).tgz
+SIGNATURE := $(TARBALL).asc
+
 WWW_HOST := www
 WWW_DIR := ~/www/software/elisp/$(PROJECT)
+
 
 
 ## Local Variables:

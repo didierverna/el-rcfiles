@@ -27,9 +27,6 @@
 
 ### Code:
 
-DIST_NAME := $(PROJECT)-$(VERSION)
-TARBALL   := $(DIST_NAME).tgz
-SIGNATURE := $(TARBALL).asc
 
 tag:
 	git tag 'version_$(VERSION)'
