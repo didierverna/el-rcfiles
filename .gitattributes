@@ -1,0 +1,16 @@
+.gitignore	export-ignore
+.gitattributes	export-ignore
+.hgauthormap	export-ignore
+.hgfilemap	export-ignore
+
+Makefile.pkg	export-ignore
+package-info.in export-ignore
+local.inc	export-ignore
+local.mak	export-ignore
+local.prj	export-ignore
+
+doc/local.inc	export-ignore
+doc/local.mak	export-ignore
+
+lisp/local.inc	export-ignore
+lisp/local.mak	export-ignore
