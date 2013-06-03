@@ -23,7 +23,7 @@ WWW_HOST := www
 WWW_DIR := ~/www/software/elisp/$(PROJECT)
 
 XP_DIR := /usr/local/share/emacs-lisp/source/xemacs-packages/xemacs-packages
-XP_PKG := $(PROJECT)
+XP_PKG := xemacs-base
 
 
 ## Local Variables:
