@@ -31,10 +31,6 @@
 tag:
 	git tag 'version_$(VERSION)'
 
-convert:
-	hg convert --filemap .hgfilemap --authormap .hgauthormap \
-	  . /usr/local/share/emacs-lisp/source/xemacs-packages/xemacs-packages/$(PROJECT)/
-
 tgz: $(TARBALL)
 gpg: $(SIGNATURE)
 dist: tgz gpg
@@ -43,7 +39,7 @@ distclean:
 	-rm $(TARBALL) $(SIGNATURE)
 	$(MAKE) gen TARGET=distclean
 
-install-www: dist
+www-dist: dist
 	echo "$(VERSION)" > /tmp/version.txt
 	chmod 644 /tmp/version.txt
 	scp -p /tmp/version.txt $(WWW_HOST):$(WWW_DIR)/
@@ -59,20 +55,28 @@ install-www: dist
 	  > /tmp/latest.txt
 	chmod 644 /tmp/latest.txt
 	scp -p /tmp/latest.txt  $(WWW_HOST):$(WWW_DIR)/
-	$(MAKE) gen TARGET=install-www
+	$(MAKE) gen TARGET=www-dist
 	ssh $(WWW_HOST)					\
 	  'cd $(WWW_DIR)					\
 	   && ln -fs attic/$(TARBALL) latest.tar.gz		\
 	   && ln -fs attic/$(SIGNATURE) latest.tar.gz.asc'
 
-uninstall-www:
+www-undist:
 	ssh $(WWW_HOST) 'rm -fr $(WWW_DIR)'
 
-install-elpa:
+xp-dist:
+ifeq ($(SIMPLE),)
+	hg convert --filemap .hgfilemap --authormap .hgauthormap \
+	  . $(XP_DIR)/$(XP_PKG)/
+else
+	cd lisp && $(MAKE) xp-dist
+endif
+
+elpa-dist:
 ifeq ($(SIMPLE),)
 	@echo "#### FIXME: not implemented for multi-file packages yet"
 else
-	cd lisp && $(MAKE) install-elpa
+	cd lisp && $(MAKE) elpa-dist
 endif
 
 $(TARBALL):
@@ -82,7 +86,7 @@ $(SIGNATURE): $(TARBALL)
 	gpg -b -a $<
 
 .PHONY: tag convert tgz gpg dist distclean \
-	install-www uninstall-www install-elpa
+	www-dist www-undist elpa-dist
 
 
 ### local.mak ends here

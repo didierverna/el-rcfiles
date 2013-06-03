@@ -22,6 +22,8 @@ SIGNATURE := $(TARBALL).asc
 WWW_HOST := www
 WWW_DIR := ~/www/software/elisp/$(PROJECT)
 
+XP_DIR := /usr/local/share/emacs-lisp/source/xemacs-packages/xemacs-packages
+XP_PKG := $(PROJECT)
 
 
 ## Local Variables:

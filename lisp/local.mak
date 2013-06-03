@@ -27,11 +27,18 @@
 
 ### Code:
 
-install-www:
+www-dist:
 
-install-elpa:
+xp-dist:
 ifeq ($(SIMPLE),)
-	echo "Please call install-elpa from the toplevel directory."
+	echo "Please call xp-dist from the toplevel directory."
+else
+	install -m 644 $(EL_FILES) $(XP_DIR)/$(XP_PKG)/
+endif
+
+elpa-dist:
+ifeq ($(SIMPLE),)
+	echo "Please call elpa-dist from the toplevel directory."
 else
 	$(EMACS) --kill -nw --eval "(require 'package-x)" \
 			    --eval '(package-upload-file "$(EL_FILES)")'
@@ -42,7 +49,7 @@ update-version:
 	perl -pi -e 's/defvar $(PROJECT)-version .*/defvar $(PROJECT)-version "$(VERSION)"/' $(EL_FILES)
 
 
-.PHONY: update-version install-www install-elpa
+.PHONY: update-version www-dist elpa-dist
 
 
 ### local.mak ends here
