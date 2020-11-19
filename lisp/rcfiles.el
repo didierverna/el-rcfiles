@@ -45,9 +45,6 @@
 
 ;;; Code:
 
-(require 'cl)
-
-
 (defvar rcfiles-version "1.0"
   "Current version number of el-rcfiles.")
 
@@ -62,7 +59,9 @@
   :group 'emacs)
 
 (defcustom rcfiles-directory
-  (if (featurep 'xemacs) "~/.xemacs/rc" "~/.emacs.d/rc")
+  (if (featurep 'sxemacs) "~/.sxemacs/rc"
+    (if (featurep 'xemacs) "~/.xemacs/rc"
+      "~/.emacs.d/rc"))
   "Directory where el-rcfiles looks for configuration files."
   :group 'rcfiles
   :type 'string)
@@ -74,11 +73,18 @@ extension."
   :group 'rcfiles
   :type 'string)
 
+(if (>= emacs-major-version 25)
+    (require 'cl-seq) ;; cl-remove-if
+  (require 'cl))
+
 (defun rcfiles-rc-files ()
   "Return the list of configuration files currently available.
 File names are expanded but their extension is removed."
   (let ((ext-regexp
-	 (concat (regexp-quote rcfiles-pseudo-extension) "\\.el[c]?$")))
+	 ;; Emacs change... was .el[c]?
+	 ;; The comment below about dups is false for Emacs. Since I
+	 ;; never have just raw .elc files we only look for .el
+	 (concat (regexp-quote rcfiles-pseudo-extension) "\\.el$")))
     (mapcar #'file-name-sans-extension
 	    ;; #### NOTE: potential duplicates (such as when there is
 	    ;; both a .el and a .elc file) are not a problem because
@@ -90,7 +96,7 @@ File names are expanded but their extension is removed."
   (let ((dir
 	 (concat "^" (regexp-quote (expand-file-name rcfiles-directory)))))
     (setq after-load-alist
-	  (remove-if (lambda (file)
+	  (cl-remove-if (lambda (file) ;; Emacs remove-if -> cl-remove-if
 		       (and (stringp file)
 			    (string-match dir file)
 			    (not (member file rcfiles))))
@@ -99,7 +105,7 @@ File names are expanded but their extension is removed."
 			    (ignore-errors
 			      (let ((load-form
 				     ;; are we having fun yet?
-				     (caddr (cadr (cadr (cadr form))))))
+				     (cl-caddr (cadr (cadr (cadr form))))))
 				(when (eq (car load-form) 'rcfiles-try-load)
 				  (cadr load-form)))))))))
 
